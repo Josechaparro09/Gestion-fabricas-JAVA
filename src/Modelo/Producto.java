@@ -2,6 +2,7 @@ package Modelo;
 
 public class Producto {
 
+    //Definicion de atributos
     private String codProducto;
     private String nombreProd;
     private Categoria cagProducto;
@@ -9,9 +10,11 @@ public class Producto {
     private double precioVenta;
     private double costoProduccion;
     
+    //Constructor por defecto
     public Producto() {
     }
 
+    //Getters y Setters
     public String getCodProducto() {
         return codProducto;
     }
@@ -59,14 +62,16 @@ public class Producto {
     public void setCostoProduccion(double costoProduccion) {
         this.costoProduccion = costoProduccion;
     }
+
+    //Mostrar Datos
+    @Override
+    public String toString() {
+        return "\nProducto: " + 
+                "\nNombre : " + nombreProd +
+                "\nCantidad: " + cantidad + 
+                "\nPrecioVenta: " + precioVenta + 
+                "\nCostoProduccion: " + costoProduccion;
+    }
     
-
-
-
-
-
-
-
-
 
 }

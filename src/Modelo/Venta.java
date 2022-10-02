@@ -1,15 +1,22 @@
 package Modelo;
+
+import java.util.Date;
+
 public class Venta {
 
+    //Definicion de atributos
     private Producto productoVen;
     private String idVenta;
     private int cantidadProd;
     private double precio;
     private double totalVenta;
+    private Date fechaVenta;
     
+    //Constructor por defecto
     public Venta() {
     }
 
+    //Getters y Setters
     public Producto getProductoVen() {
         return productoVen;
     }
@@ -49,9 +56,14 @@ public class Venta {
     public void setTotalVenta(double totalVenta) {
         this.totalVenta = totalVenta;
     }
+
+    public Date getFechaVenta() {
+        return fechaVenta;
+    }
+
+    public void setFechaVenta(Date fechaVenta) {
+        this.fechaVenta = fechaVenta;
+    }
+
     
-
-
-
-
 }

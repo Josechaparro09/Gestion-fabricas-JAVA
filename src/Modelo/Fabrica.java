@@ -2,6 +2,7 @@ package Modelo;
 
 public class Fabrica {
 
+    //Definicion de atributos
     private String nombre;
     private String nit;
     private String direccionF;
@@ -11,14 +12,32 @@ public class Fabrica {
     private Categoria datosCag;
     private Producto datosProd;
     private Planta datosPlantas;
+    private MateriaPrima datosMPrima;
     
+    
+    //Constructor
     public Fabrica() {
     }
 
+    public Fabrica(String nombre, String nit, String direccionF, Produccion datosProducc, Empleado datosEmpleados, Venta datosVentas, Categoria datosCag, Producto datosProd, Planta datosPlantas, MateriaPrima datosMPrima) {
+        this.nombre = nombre;
+        this.nit = nit;
+        this.direccionF = direccionF;
+        this.datosProducc = datosProducc;
+        this.datosEmpleados = datosEmpleados;
+        this.datosVentas = datosVentas;
+        this.datosCag = datosCag;
+        this.datosProd = datosProd;
+        this.datosPlantas = datosPlantas;
+        this.datosMPrima = datosMPrima;
+    }
+    
+    
+     //Getters y Setters
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -86,13 +105,30 @@ public class Fabrica {
     public void setDatosPlantas(Planta datosPlantas) {
         this.datosPlantas = datosPlantas;
     }
+
+    public MateriaPrima getDatosMPrima() {
+        return datosMPrima;
+    }
+
+    public void setDatosMPrima(MateriaPrima datosMPrima) {
+        this.datosMPrima = datosMPrima;
+    }
+
+    //Mostrar datos
+    @Override
+    public String toString() {
+        return "\nFabrica:" + 
+                "\nNombre: " + nombre + 
+                "\nNit: " + nit + 
+                "\nDireccion: " + direccionF + 
+                "\nProduccion: " + datosProducc + 
+                "\nEmpleado: " + datosEmpleados + 
+                "\nVenta: " + datosVentas +
+                "\nProducto: " + datosProd + 
+                "\nPlanta: " + datosPlantas + 
+                "\nMateria Prima: " + datosMPrima ;
+    }
     
-
-
-
-
-
-
 
 
 

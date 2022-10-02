@@ -1,16 +1,19 @@
 package Modelo;
 
 public class Planta {
+    //Definicion de atributos
     private String nombre;
     private String direccion;
     private Fabrica fabricaAsig;
     private Empleado empleadoAsig;
     private Produccion producido;
-        
+    
+    //Constructor por defecto
     public Planta() {
         
     }
 
+    //Getter y Setter
     public String getNombre() {
         return nombre;
     }
@@ -50,20 +53,17 @@ public class Planta {
     public void setProducido(Produccion producido) {
         this.producido = producido;
     }
+
+    @Override
+    public String toString() {
+        return "\nPlanta:" + 
+                "\nnombre: " + nombre + 
+                "\ndireccion: " + direccion + 
+                "\nfabricaAsig: " + fabricaAsig.getNombre() + 
+                "\nempleadoAsig: " + empleadoAsig.getNombres() + 
+                "\nproducido: " + producido;
+    }
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 }
