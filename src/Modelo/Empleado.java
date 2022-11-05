@@ -1,5 +1,6 @@
 package Modelo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Empleado {
@@ -11,6 +12,7 @@ public class Empleado {
     private String telefono;
     public Planta plantaEnc;
     public Date fechaIngreso;
+    ArrayList<Empleado> empleados = new ArrayList();
     
     //Costructor por defecto
     public Empleado() {
@@ -64,6 +66,14 @@ public class Empleado {
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
+
+    public ArrayList<Empleado> getEmpleados() {
+        return empleados;
+    }
+
+    public void setEmpleados(ArrayList<Empleado> empleados) {
+        this.empleados = empleados;
+    }
     
     
     //Mostrar datos
@@ -78,6 +88,19 @@ public class Empleado {
                 "\nfechaIngreso :" + fechaIngreso ;
     }
 
+    public ArrayList<Empleado> agregarEmpleado(Empleado em){
+        this.empleados.add(em);
+        return this.empleados;
+    }
+    public int BuscarEmpleadoByCC(String cc){
+        int pos = 0;
+        for (Empleado empleado : empleados) {
+            if (empleados.equals(cc)) {
+                pos = empleados.indexOf(cc);
+            }
+        }
+        return pos;
+    }
     
     
     
