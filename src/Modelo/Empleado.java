@@ -2,6 +2,7 @@ package Modelo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 public class Empleado {
     
@@ -88,19 +89,39 @@ public class Empleado {
                 "\nfechaIngreso :" + fechaIngreso ;
     }
 
-    public ArrayList<Empleado> agregarEmpleado(Empleado em){
+    public void agregarEmpleado(Empleado em){
         this.empleados.add(em);
-        return this.empleados;
     }
-    public int BuscarEmpleadoByCC(String cc){
-        int pos = 0;
-        for (Empleado empleado : empleados) {
-            if (empleados.equals(cc)) {
-                pos = empleados.indexOf(cc);
+    public Empleado eliminarEmpleadoBycc(String cc){
+        Empleado eliminado = null;
+        Iterator<Empleado> i = this.empleados.iterator();
+        while (i.hasNext()) {
+
+            Empleado leido = i.next();
+            if (leido.getCedula()==cc) {
+                eliminado=leido;
+                i.remove();
+                break;
+            }
+            
+        }
+        return eliminado;
+    }
+    
+    public Empleado BuscarEmpleadoByCC(String cc){
+        
+        Empleado emp = null;
+        for (Empleado em : this.empleados) {
+            if (em.getCedula()== cc) {
+               emp=em;
+               
+               break;
             }
         }
-        return pos;
+        return emp;
     }
+    
+    
     
     
     
