@@ -19,7 +19,10 @@ public class TrabajadoresCE {
         this.prueba = prueba;
     }
     
-    
+    public String mostrar(){
+        String dato = String.format("Aca esta la prueba"+prueba);
+        return dato;
+    }
     
     
     
