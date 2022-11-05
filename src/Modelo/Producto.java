@@ -1,5 +1,7 @@
 package Modelo;
 
+import java.util.ArrayList;
+
 public class Producto {
 
     //Definicion de atributos
@@ -9,6 +11,7 @@ public class Producto {
     private int cantidad;
     private double precioVenta;
     private double costoProduccion;
+    ArrayList<Producto> productos = new ArrayList();
     
     //Constructor por defecto
     public Producto() {
@@ -73,5 +76,16 @@ public class Producto {
                 "\nCostoProduccion: " + costoProduccion;
     }
     
+    public void agregarProducto(Producto prod){
+        this.productos.add(prod);
+    }
+    public void eliminarProducto(Producto prod){
+        ArrayList<Producto> pds = new ArrayList();
+        for (Producto p : this.productos) {
+            if (p==prod) {
+                productos.remove(productos.)
+            }
+        }
+    }
 
 }
