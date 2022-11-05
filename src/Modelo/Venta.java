@@ -1,5 +1,6 @@
 package Modelo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Venta {
@@ -11,6 +12,7 @@ public class Venta {
     private double precio;
     private double totalVenta;
     private Date fechaVenta;
+    ArrayList<Venta> ventas = new ArrayList();
     
     //Constructor por defecto
     public Venta() {
@@ -63,6 +65,18 @@ public class Venta {
 
     public void setFechaVenta(Date fechaVenta) {
         this.fechaVenta = fechaVenta;
+    }
+
+    public ArrayList<Venta> getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(ArrayList<Venta> ventas) {
+        this.ventas = ventas;
+    }
+    
+    public void agregarVenta(){
+        
     }
 
     

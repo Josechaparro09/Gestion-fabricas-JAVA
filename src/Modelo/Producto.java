@@ -1,6 +1,7 @@
 package Modelo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Producto {
 
@@ -79,13 +80,17 @@ public class Producto {
     public void agregarProducto(Producto prod){
         this.productos.add(prod);
     }
-    public void eliminarProducto(Producto prod){
-        ArrayList<Producto> pds = new ArrayList();
-        for (Producto p : this.productos) {
-            if (p==prod) {
-                productos.remove(productos.)
+    public Producto eliminarProducto(Producto prod){
+        Producto eliminado = null ; 
+        Iterator<Producto> i = this.productos.iterator();
+        while (i.hasNext()) {            
+            Producto leida = i.next();
+            if (prod==leida) {
+                i.remove();
+                break;
             }
         }
+        return eliminado;
     }
 
 }
