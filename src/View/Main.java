@@ -22,6 +22,7 @@ public class Main {
         e1.setNombres("Jose Alberto");
         e1.setApellidos("Chaparro Castro");
         e1.setCedula("1066875671");
+        System.out.println(e1.BuscarEmpleadoByCC("1066875671"));
         e1.setFechaIngreso(new Date());
         e1.setPlantaEnc(p1);
         e1.setTelefono("3024105794");
