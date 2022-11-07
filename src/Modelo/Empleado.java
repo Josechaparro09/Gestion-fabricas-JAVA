@@ -19,6 +19,17 @@ public class Empleado {
     public Empleado() {
     }
 
+    public Empleado(String nombres, String apellidos, String cedula, String telefono, Planta plantaEnc, Date fechaIngreso) {
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.cedula = cedula;
+        this.telefono = telefono;
+        this.plantaEnc = plantaEnc;
+        this.fechaIngreso = fechaIngreso;
+        this.agregarEmpleado();
+    }
+    
+    
     //Getters y Setters
     public String getNombres() {
         return nombres;
@@ -90,8 +101,8 @@ public class Empleado {
                 "\nfechaIngreso :" + fechaIngreso ;
     }
 
-    public void agregarEmpleado(Empleado em){
-        this.empleados.add(em);
+    public void agregarEmpleado(){
+        this.empleados.add(this);
     }
     public Empleado eliminarEmpleadoBycc(String cc){
         Empleado eliminado = null;

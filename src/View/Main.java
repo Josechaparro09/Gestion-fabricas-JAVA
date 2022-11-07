@@ -22,7 +22,7 @@ public class Main {
         e1.setNombres("Jose Alberto");
         e1.setApellidos("Chaparro Castro");
         e1.setCedula("1066875671");
-        e1.agregarEmpleado(e1);
+        e1.agregarEmpleado();
         System.out.println(e1.BuscarEmpleadoByCC("1066875671"));
         e1.setFechaIngreso(new Date());
         e1.setPlantaEnc(p1);
@@ -42,7 +42,12 @@ public class Main {
         
         //
         
+        Producto pro2 = new Producto("123456", "Esencia Chicle", c1, 6, 1500, 1000);
+        
+        //
+        
         Produccion producc1 = new Produccion("P1", new Date(), e1, p1, pro1, c1, mp1, 0.5, 5);
+
         Fabrica f1 = new Fabrica("Sabores del valle SAS", "120001001219", "Cra 41 # 5e 29", producc1, e1, v1, c1, pro1, p1, mp1);
         p1.setFabricaAsig(f1);
         

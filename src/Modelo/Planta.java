@@ -1,5 +1,7 @@
 package Modelo;
 
+import java.util.ArrayList;
+
 public class Planta {
     //Definicion de atributos
     private String nombre;
@@ -7,12 +9,23 @@ public class Planta {
     private Fabrica fabricaAsig;
     private Empleado empleadoAsig;
     private Produccion producido;
-    
+    private ArrayList<Planta> plantas = new ArrayList();
+            
     //Constructor por defecto
     public Planta() {
         
     }
 
+    public Planta(String nombre, String direccion, Fabrica fabricaAsig, Empleado empleadoAsig, Produccion producido) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.fabricaAsig = fabricaAsig;
+        this.empleadoAsig = empleadoAsig;
+        this.producido = producido;
+        agregarPlanta();
+    }
+    
+    
     //Getter y Setter
     public String getNombre() {
         return nombre;
@@ -64,6 +77,8 @@ public class Planta {
                 "\nproducido: " + producido;
     }
     
-    
+    public void agregarPlanta(){
+        plantas.add(this);
+    }
 
 }

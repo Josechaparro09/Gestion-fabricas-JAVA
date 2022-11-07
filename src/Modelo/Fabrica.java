@@ -1,5 +1,7 @@
 package Modelo;
 
+import java.util.ArrayList;
+
 public class Fabrica {
 
     //Definicion de atributos
@@ -13,6 +15,7 @@ public class Fabrica {
     private Producto datosProd;
     private Planta datosPlantas;
     private MateriaPrima datosMPrima;
+    ArrayList<Fabrica> fabricas = new ArrayList();
     
     
     //Constructor

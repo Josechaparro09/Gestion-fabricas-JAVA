@@ -6,17 +6,28 @@ import java.util.Iterator;
 public class Producto {
 
     //Definicion de atributos
-    private String codProducto;
-    private String nombreProd;
-    private Categoria cagProducto;
-    private int cantidad;
-    private double precioVenta;
-    private double costoProduccion;
+    protected String codProducto;
+    protected String nombreProd;
+    protected Categoria cagProducto;
+    protected int cantidad;
+    protected double precioVenta;
+    protected double costoProduccion;
     ArrayList<Producto> productos = new ArrayList();
     
     //Constructor por defecto
     public Producto() {
     }
+    
+    public Producto(String codProducto, String nombreProd, Categoria cagProducto, int cantidad, double precioVenta, double costoProduccion) {
+        this.codProducto = codProducto;
+        this.nombreProd = nombreProd;
+        this.cagProducto = cagProducto;
+        this.cantidad = cantidad;
+        this.precioVenta = precioVenta;
+        this.costoProduccion = costoProduccion;
+        this.agregarProducto();
+    }
+    
 
     //Getters y Setters
     public String getCodProducto() {
@@ -77,8 +88,8 @@ public class Producto {
                 "\nCostoProduccion: " + costoProduccion;
     }
     
-    public void agregarProducto(Producto prod){
-        this.productos.add(prod);
+    public void agregarProducto(){
+        this.productos.add(this);
     }
     public Producto eliminarProducto(Producto prod){
         Producto eliminado = null ; 
