@@ -1,8 +1,12 @@
 package Modelo;
 
+import View.Dashboard;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Empleado {
     
@@ -132,9 +136,22 @@ public class Empleado {
         }
         return emp;
     }
-    
-    
-    
-    
+    public String consultarDatos(){
+        String datos = String.format("%15s\t%15s\t%15s\t%15s\t%15s",
+                                    this.cedula,
+                                    this.nombres,
+                                    this.apellidos,
+                                    this.telefono,
+                                    this.plantaEnc.getNombre()
+                                     );
+        return datos;
+    }
+    public boolean validarVacio(String a){
+        if (!"".equals(a)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 }

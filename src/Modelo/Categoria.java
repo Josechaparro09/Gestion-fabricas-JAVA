@@ -11,6 +11,11 @@ public class Categoria {
     //Constructor por defecto
     public Categoria() {
     }
+    //Constructor sobrecargado
+    public Categoria(String nombre, String codigo) {
+        this.nombre = nombre;
+        this.codigo = codigo;
+    }
     
     
     //Getters y Setter

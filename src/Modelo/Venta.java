@@ -110,7 +110,7 @@ public class Venta {
         }
         return this.ganancias;
     }
-    public void agregarVenta(){
+    public void agregarPreventa(){
         
     }
     

@@ -1,5 +1,6 @@
 package Modelo;
 
+import Datos.Libro;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,7 +18,7 @@ public class Producto {
     //Constructor por defecto
     public Producto() {
     }
-    
+    //Constructor sobrecargado
     public Producto(String codProducto, String nombreProd, Categoria cagProducto, int cantidad, double precioVenta, double costoProduccion) {
         this.codProducto = codProducto;
         this.nombreProd = nombreProd;
@@ -103,5 +104,18 @@ public class Producto {
         }
         return eliminado;
     }
+    public String consultarDatos(){
+        String datos = String.format("%15s\t%15s\t%15s\t%10.2f\t%10.2f\t%2d",
+                                     this.codProducto,
+                                     this.nombreProd,
+                                     this.cagProducto.getNombre(),
+                                     this.costoProduccion,
+                                     this.precioVenta,
+                                     this.cantidad
+                                     );
+        return datos;
+    }
+   
+    
 
 }

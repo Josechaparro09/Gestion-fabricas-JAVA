@@ -1,5 +1,7 @@
 package Modelo;
 
+import Datos.IAEntidades;
+import Datos.Libro;
 import java.util.ArrayList;
 
 public class Fabrica {
@@ -15,6 +17,8 @@ public class Fabrica {
     private Producto datosProd;
     private Planta datosPlantas;
     private MateriaPrima datosMPrima;
+    private Libro libro ;
+    
     ArrayList<Fabrica> fabricas = new ArrayList();
     
     
@@ -33,6 +37,7 @@ public class Fabrica {
         this.datosProd = datosProd;
         this.datosPlantas = datosPlantas;
         this.datosMPrima = datosMPrima;
+        this.libro = new Libro();
     }
     
     
@@ -117,6 +122,15 @@ public class Fabrica {
         this.datosMPrima = datosMPrima;
     }
 
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Libro libro) {
+        this.libro = libro;
+    }
+    
+
     //Mostrar datos
     @Override
     public String toString() {
@@ -131,8 +145,6 @@ public class Fabrica {
                 "\nPlanta: " + datosPlantas + 
                 "\nMateria Prima: " + datosMPrima ;
     }
+
     
-
-
-
 }
