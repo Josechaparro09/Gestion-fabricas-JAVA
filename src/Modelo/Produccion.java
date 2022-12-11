@@ -104,7 +104,7 @@ public class Produccion {
                 "\nnombreProducc:" + nombreProducc + 
                 "\ncodProducc=" + codProducc + 
                 "\nfechaProducc=" + fechaProducc + 
-                "\nempleadoEncar=" + empleadoEncar.getP_nombre()+ 
+                "\nempleadoEncar=" + empleadoEncar.getNombres() + 
                 "\nplantaEncar=" + plantaEncar.getNombre() + 
                 "\ndatosProd=" + datosProd + 
                 "\ncategoriaProd=" + categoriaProd + 

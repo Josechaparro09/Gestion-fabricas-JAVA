@@ -73,7 +73,7 @@ public class Planta {
                 "\nnombre: " + nombre + 
                 "\ndireccion: " + direccion + 
                 "\nfabricaAsig: " + fabricaAsig.getNombre() + 
-                "\nempleadoAsig: " + empleadoAsig.getP_nombre()+ 
+                "\nempleadoAsig: " + empleadoAsig.getNombres() + 
                 "\nproducido: " + producido;
     }
     

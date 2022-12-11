@@ -3,7 +3,6 @@ package View;
 
 import Modelo.*;
 import java.util.Date;
-import javax.swing.JFrame;
 
 public class Main {
     
@@ -67,9 +66,6 @@ public class Main {
         //Mostrar datos
         
         //System.out.println("Fabrica: " +f1);
-        Dashboard dashboard = new Dashboard();
-        dashboard.setVisible(true);
-        dashboard.setExtendedState(JFrame.MAXIMIZED_BOTH);
    
     }
     
