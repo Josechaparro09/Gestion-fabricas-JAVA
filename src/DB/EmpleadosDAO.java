@@ -7,7 +7,6 @@ package DB;
 
 import Modelo.Conexion;
 import Modelo.*;
-import java.awt.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author josec
  */
-public class EmpleadoDAO {
+public class EmpleadosDAO {
     
     
     Conexion cn = new Conexion();
@@ -28,14 +27,16 @@ public class EmpleadoDAO {
     ResultSet rs;
     
     public boolean RegistrarEmpleado(Empleado em) throws ClassNotFoundException, SQLException{
-        String sql = "INSERT INTO empleado(cedula,nombres,apellidos,telefono) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO empleados(cc,p_nombre,s_nombre,p_apellido,s_apellido,telefono,f_ingreso) VALUES (?,?,?,?,?,?,NOW())";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
             ps.setString(1, em.getCedula());
-            ps.setString(2, em.getNombres());
-            ps.setString(3, em.getApellidos());
-            ps.setString(4, em.getTelefono());
+            ps.setString(2, em.getP_nombre());
+            ps.setString(3, em.getS_nombre());
+            ps.setString(4, em.getP_apellido());
+            ps.setString(5, em.getS_apellido());
+            ps.setString(6, em.getTelefono());
             ps.execute();
             con.close();
             return true;
@@ -49,16 +50,18 @@ public class EmpleadoDAO {
     }
     public ArrayList<Empleado> listarEmpleados() throws SQLException{
         ArrayList<Empleado> listaEmp = new ArrayList();
-        String sql = "SELECT * FROM empleado";
+        String sql = "SELECT * FROM empleados";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Empleado emp = new Empleado();
-                emp.setCedula(rs.getString("cedula"));
-                emp.setNombres(rs.getString("nombres"));
-                emp.setApellidos(rs.getString("apellidos"));
+                emp.setCedula(rs.getString("cc"));
+                emp.setP_nombre(rs.getString("p_nombre"));
+                emp.setS_nombre(rs.getString("s_nombre"));
+                emp.setP_apellido(rs.getString("p_apellido"));
+                emp.setS_apellido(rs.getString("s_apellido"));
                 emp.setTelefono(rs.getString("telefono"));
                 listaEmp.add(emp);
             }
@@ -69,15 +72,20 @@ public class EmpleadoDAO {
         return listaEmp;
     }
     public boolean ModificarEmpleado(Empleado em) {
-        String sql = "UPDATE empleado SET cedula=? ,nombres = ?, apellidos = ?,telefono = ? WHERE cedula  = ?";
+        String sql = "UPDATE empleados SET cc=? ,p_nombre = ?, s_nombre = ?,p_apellido = ? , s_apellido = ? , telefono = ? WHERE cc  =?";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
             ps.setString(1, em.getCedula());
-            ps.setString(2, em.getNombres());
-            ps.setString(3, em.getApellidos());
-            ps.setString(4, em.getTelefono());
-            ps.execute();
+            System.out.println(em.getCedula());
+            ps.setString(2, em.getP_nombre());
+            ps.setString(3, em.getS_nombre());
+            ps.setString(4, em.getP_apellido());
+            ps.setString(5, em.getS_apellido());
+            ps.setString(6, em.getTelefono());
+            ps.setString(7, em.getCedula());
+            ps.executeUpdate();
+            ps.close();
             con.close();
             return true;
         } catch (SQLException e) {
@@ -86,7 +94,7 @@ public class EmpleadoDAO {
         }
     }
     public boolean eliminarEmpleado(String cedula) throws SQLException{
-        String sql = "DELETE FROM empleado WHERE cedula = ?";
+        String sql = "DELETE FROM empleados WHERE cc = ?";
         try {
             con = cn.getConexion();
             ps=con.prepareStatement(sql);
