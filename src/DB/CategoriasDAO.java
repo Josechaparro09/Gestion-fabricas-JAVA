@@ -121,5 +121,23 @@ public class CategoriasDAO {
 
         return listaCag;
     }
+    public String buscarnombreCag(String id){
+        
+        String nombre=null;
+        
+         String sql = "SELECT n_cag FROM categorias WHERE id_categoria = '" + id+"'";
+        try {
+            con = cn.getConexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                nombre = rs.getString("n_cag");
+            }
+            con.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.toString());
+        }
+        return nombre;
+    }
     
 }

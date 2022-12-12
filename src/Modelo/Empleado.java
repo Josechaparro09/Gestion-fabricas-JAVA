@@ -1,12 +1,8 @@
 package Modelo;
 
-import View.Dashboard;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+
 
 public class Empleado {
     
@@ -17,7 +13,6 @@ public class Empleado {
     private String s_apellido;
     private String cedula;
     private String telefono;
-    public Planta plantaEnc;
     public Date fechaIngreso;
     ArrayList<Empleado> empleados = new ArrayList();
     
@@ -25,14 +20,13 @@ public class Empleado {
     public Empleado() {
     }
 
-    public Empleado(String p_nombre, String s_nombre, String p_apellido, String s_apellido, String cedula, String telefono, Planta plantaEnc, Date fechaIngreso) {
+    public Empleado(String p_nombre, String s_nombre, String p_apellido, String s_apellido, String cedula, String telefono, Date fechaIngreso) {
         this.p_nombre = p_nombre;
         this.s_nombre = s_nombre;
         this.p_apellido = p_apellido;
         this.s_apellido = s_apellido;
         this.cedula = cedula;
         this.telefono = telefono;
-        this.plantaEnc = plantaEnc;
         this.fechaIngreso = fechaIngreso;
         this.agregarEmpleado();
     }
@@ -85,14 +79,6 @@ public class Empleado {
         this.telefono = telefono;
     }
 
-    public Planta getPlantaEnc() {
-        return plantaEnc;
-    }
-
-    public void setPlantaEnc(Planta plantaEnc) {
-        this.plantaEnc = plantaEnc;
-    }
-
     public Date getFechaIngreso() {
         return fechaIngreso;
     }
@@ -112,34 +98,11 @@ public class Empleado {
 
     //Hola
     //Mostrar datos
-    @Override
-    public String toString() {
-        return "\nEmpleado: " + "\nNombres:" + p_nombre +
-                "\napellidos :" + p_apellido +
-                "\ncedula :" + cedula +
-                "\ntelefono :" + telefono +
-                "\nplantaEnc :" + plantaEnc.getNombre()+ 
-                "\nfechaIngreso :" + fechaIngreso ;
-    }
-
+   
     public void agregarEmpleado(){
         this.empleados.add(this);
     }
-    public Empleado eliminarEmpleadoBycc(String cc){
-        Empleado eliminado = null;
-        Iterator<Empleado> i = this.empleados.iterator();
-        while (i.hasNext()) {
-
-            Empleado leido = i.next();
-            if (leido.getCedula()==cc) {
-                eliminado=leido;
-                i.remove();
-                break;
-            }
-            
-        }
-        return eliminado;
-    }
+   
     
     public Empleado BuscarEmpleadoByCC(String cc){
         
@@ -153,16 +116,7 @@ public class Empleado {
         }
         return emp;
     }
-    public String consultarDatos(){
-        String datos = String.format("%15s\t%15s\t%15s\t%15s\t%15s",
-                                    this.cedula,
-                                    this.p_nombre,
-                                    this.p_apellido,
-                                    this.telefono,
-                                    this.plantaEnc.getNombre()
-                                     );
-        return datos;
-    }
+   
     public boolean validarVacio(String a){
         if (!"".equals(a)) {
             return true;

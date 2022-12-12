@@ -122,5 +122,22 @@ public class MedidasDAO {
 
         return listaMed;
     }
-    
+    public String buscarnombreMed(String id){
+        
+        String nombre=null;
+        
+         String sql = "SELECT n_corto FROM medidas WHERE id_medida = '" + id + "'";
+        try {
+            con = cn.getConexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                nombre = rs.getString("n_corto");
+            }
+            con.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.toString());
+        }
+        return nombre;
+    }
 }

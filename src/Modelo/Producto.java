@@ -1,6 +1,5 @@
 package Modelo;
 
-import Datos.Libro;
 import java.util.ArrayList;
 import java.util.Iterator;
 
