@@ -19,7 +19,7 @@ public class Preventa {
         this.producto = producto;
         this.total = calcularTotal();
         this.gananciasPre=this.calcularGananciasPre();
-        this.producto.setCantidad(this.producto.getCantidad()-this.cantP);
+//        this.producto.setCantidad(this.producto.getCantidad()-this.cantP);
         
     }
 
@@ -83,11 +83,12 @@ public class Preventa {
     
     public boolean validarPPreventa(){
         
-        if (this.cantP>this.producto.getCantidad()) {
-            return false;
-        }else{
-            return true;
-        }
+//        if (this.cantP>this.producto.getCantidad()) {
+//            return false;
+//        }else{
+//            return true;
+//        }
+        return false;
     }
     public double calcularGananciasPre(){
         if (validarPPreventa()) {

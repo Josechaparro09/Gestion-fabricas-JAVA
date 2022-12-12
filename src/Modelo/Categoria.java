@@ -6,15 +6,15 @@ import java.util.Iterator;
 public class Categoria {
     //Definicion de atributos
     private String nombre;
-    private String codigo;
+    private String id;
     ArrayList<Categoria> categorias = new ArrayList();
     //Constructor por defecto
     public Categoria() {
     }
     //Constructor sobrecargado
-    public Categoria(String nombre, String codigo) {
+    public Categoria(String nombre, String id) {
         this.nombre = nombre;
-        this.codigo = codigo;
+        this.id = id;
     }
     
     
@@ -27,14 +27,15 @@ public class Categoria {
         this.nombre = nombre;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getId() {
+        return id;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setId(String id) {
+        this.id = id;
     }
 
+    
     public ArrayList<Categoria> getCategorias() {
         return categorias;
     }

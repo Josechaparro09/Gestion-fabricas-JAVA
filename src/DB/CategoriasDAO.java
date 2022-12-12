@@ -5,73 +5,72 @@
  */
 package DB;
 
-import Modelo.Conexion;
 import Modelo.*;
+import Modelo.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author josec
  */
-public class MedidasDAO {
+public class CategoriasDAO {
     Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     
-    public boolean RegistrarMedidas(Medida me) throws ClassNotFoundException, SQLException{
-        String sql = "INSERT INTO medidas(id_medida , n_medida , n_corto) VALUES (?,?,?)";
+    public boolean RegistrarCag(Categoria cag) throws ClassNotFoundException, SQLException{
+        String sql = "INSERT INTO categorias(id_categoria , n_cag ) VALUES (?,?)";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
-            ps.setString(1, me.getIdMedida());
-            ps.setString(2, me.getNombre());
-            ps.setString(3, me.getnCorto());
+            ps.setString(1, cag.getId());
+            ps.setString(2, cag.getNombre());
             ps.execute();
             con.close();
             return true;
         }catch(java.sql.SQLIntegrityConstraintViolationException scv){
-            JOptionPane.showMessageDialog(null, "La medida ya existe");
+            JOptionPane.showMessageDialog(null, "La Categoria ya existe");
             return false;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.toString());
             return false;
         }
     }
-    public ArrayList<Medida> listarMedidas() throws SQLException{
-        ArrayList<Medida> listaMedidas = new ArrayList();
-        String sql = "SELECT * FROM medidas";
+    public ArrayList<Categoria> listarCag() throws SQLException{
+        ArrayList<Categoria> listaCag = new ArrayList();
+        String sql = "SELECT * FROM categorias";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Medida me = new Medida();
-                me.setIdMedida(rs.getString("id_medida"));
-                me.setNombre(rs.getString("n_medida"));
-                me.setnCorto(rs.getString("n_corto"));
-                listaMedidas.add(me);
+                Categoria cag = new Categoria();
+                cag.setId(rs.getString("id_categoria"));
+                cag.setNombre(rs.getString("n_cag"));
+                
+                listaCag.add(cag);
             }
             con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
-        return listaMedidas;
+        return listaCag;
     }
-    public boolean ModificarMedida(Medida me) {
-        String sql = "UPDATE medidas SET id_medida=? ,n_medida = ?, n_corto = ? WHERE id_medida  = ?";
+    public boolean ModificarCag(Categoria cag) {
+        String sql = "UPDATE categorias SET id_categoria=? ,n_cag = ? WHERE id_categoria  = ?";
         try {
             con = cn.getConexion();
             ps = con.prepareStatement(sql);
-            ps.setString(1, me.getIdMedida());
-            ps.setString(2, me.getNombre());
-            ps.setString(3, me.getnCorto());
-            ps.setString(4, me.getIdMedida());
+            ps.setString(1, cag.getId());
+            ps.setString(2, cag.getNombre());
+            ps.setString(3, cag.getId());
             ps.execute();
             con.close();
             return true;
@@ -80,12 +79,12 @@ public class MedidasDAO {
             return false;
         }
     }
-    public boolean eliminarMedida(String id_medida) throws SQLException{
-        String sql = "DELETE FROM medidas WHERE id_medida = ?";
+    public boolean eliminarCag(String id_categoria) throws SQLException{
+        String sql = "DELETE FROM categorias WHERE id_categoria = ?";
         try {
             con = cn.getConexion();
             ps=con.prepareStatement(sql);
-            ps.setString(1, id_medida);
+            ps.setString(1, id_categoria);
             ps.execute();
             con.close();
             
@@ -95,23 +94,22 @@ public class MedidasDAO {
             return false;
         }
     }
-     public ArrayList<Medida> listaMedidas(){
-        ArrayList<Medida> listaMed= new ArrayList();  
+    public ArrayList<Categoria> listaCategorias(){
+        ArrayList<Categoria> listaCag= new ArrayList();  
          try {
             con = cn.getConexion();
            
-            String sql = "SELECT * FROM medidas";
+            String sql = "SELECT * FROM categorias";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             
             
             while (rs.next()) {
-                Medida med = new Medida();
-                med.setIdMedida(rs.getString("id_medida"));
-                med.setNombre(rs.getString("n_medida"));
-                med.setNombre(rs.getString("n_corto"));
+                Categoria cag = new Categoria();
+                cag.setId(rs.getString("id_categoria"));
+                cag.setNombre(rs.getString("n_cag"));
                 
-                listaMed.add(med);
+                listaCag.add(cag);
                 
             }
             con.close();
@@ -119,8 +117,9 @@ public class MedidasDAO {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
+         
 
-        return listaMed;
+        return listaCag;
     }
     
 }

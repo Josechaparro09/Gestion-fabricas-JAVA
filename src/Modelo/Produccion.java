@@ -27,7 +27,7 @@ public class Produccion {
         this.categoriaProd = categoriaProd;
         this.mPrimaUtil = mPrimaUtil;
         this.mPrimaUtil.setCatidad(mPrimaUtil.getCatidad()-cMPrimaUtilizada);
-        this.datosProd.setCantidad(datosProd.getCantidad()-cantidaPproduccida);
+//        this.datosProd.setCantidad(datosProd.getCantidad()-cantidaPproduccida);
     }
     
     

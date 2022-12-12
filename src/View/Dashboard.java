@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,7 +28,12 @@ public class Dashboard extends javax.swing.JFrame {
     EmpleadosDAO empDao = new EmpleadosDAO();
     Medida me = new Medida();
     MedidasDAO meDao = new MedidasDAO();
+    Categoria cag = new Categoria();
+    CategoriasDAO cagDao = new CategoriasDAO();
+    Producto prod = new Producto();
+    ProductosDao prodDao = new ProductosDao();
     DefaultTableModel modelo = new DefaultTableModel();
+    
     int modificar ;
     /**
      * Creates new form Dashboard
@@ -34,6 +41,7 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
         initComponents();
     }
+    //Campos editables
     public void empleadoEditable(boolean ed){
         txtccEmp.setEditable(ed);
         txtpNombreEmp.setEditable(ed);
@@ -47,7 +55,13 @@ public class Dashboard extends javax.swing.JFrame {
         txtTelefonoEmp.setFocusable(ed);
         txtpApellidoEmp.setFocusable(ed);
         txtsApellidoEmp.setFocusable(ed);
-        
+    }
+    public void cagEditable(boolean ed){
+        txtidCag.setEditable(ed);
+        txtNombreMed.setEditable(ed);
+        txtNombreCag.setEditable(ed);
+        txtidCag.setFocusable(ed);
+        txtNombreCag.setFocusable(ed);
     }
     public void medidaEditable(boolean ed){
         txtidMed.setEditable(ed);
@@ -58,6 +72,16 @@ public class Dashboard extends javax.swing.JFrame {
         txtNombreCortoMed.setFocusable(ed);
         
     }
+    public void prodEditable(boolean ed){
+        txtIdProd.setEditable(ed);
+        txtNombreProd.setEditable(ed);
+        txtPrecioProduccProd.setEditable(ed);
+        txtPrecioVentaProd.setFocusable(ed);
+        cbxCategoriaProd.setFocusable(ed);
+        cbxMedidaProd.setFocusable(ed);
+    }
+    
+    //limpiar txtfields
     public void limpiarempleado(){
         txtccEmp.setText("");
         txtpNombreEmp.setText("");
@@ -66,8 +90,50 @@ public class Dashboard extends javax.swing.JFrame {
         txtpApellidoEmp.setText("");
         txtsApellidoEmp.setText("");
     }
+    public void limpiarCag(){
+        txtidCag.setText("");
+        txtNombreCag.setText("");
+    }
+    public void limpiarmedida(){
+        txtidMed.setText("");
+        txtNombreMed.setText("");
+        txtNombreCortoMed.setText("");
+    }
+    public void limpiarProd(){
+        txtIdProd.setText("");
+        txtNombreProd.setText("");
+        txtPrecioProduccProd.setText("");
+        txtPrecioVentaProd.setText("");
+        cbxCategoriaProd.setSelectedItem("");
+        cbxMedidaProd.setSelectedItem("");
+    }
+    
+    public void listaComboCagProd(){
+        DefaultComboBoxModel<String> modCombo = new DefaultComboBoxModel<>();
+        ArrayList<Categoria> listaCag = cagDao.listaCategorias();
+        for (Categoria cag : listaCag) {
+           modCombo.addElement(cag.getNombre());  
+        }
+        cbxCategoriaProd.setModel((ComboBoxModel) modCombo);
+    }
+    public void listaComboMedProd(){
+        DefaultComboBoxModel<String> modCombo = new DefaultComboBoxModel<>();
+        ArrayList<Medida> listaMed = meDao.listaMedidas();
+        for (Medida med : listaMed) {
+           modCombo.addElement(med.getNombre());  
+        }
+        cbxMedidaProd.setModel((ComboBoxModel) modCombo);
+    }
+    //Validar vacio
     public boolean validarEmp(){
         if (!"".equals(txtccEmp.getText()) || !"".equals(txtpNombreEmp.getText()) || !"".equals(txtsNombreEmp.getText()) || !"".equals(txtTelefonoEmp.getText())) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean validarCag(){
+        if (!"".equals(txtidCag.getText()) || !"".equals(txtNombreCag.getText())) {
             return true;
         }else{
             return false;
@@ -80,12 +146,16 @@ public class Dashboard extends javax.swing.JFrame {
             return false;
         }
     }
-    
-    public void limpiarmedida(){
-        txtidMed.setText("");
-        txtNombreMed.setText("");
-        txtNombreCortoMed.setText("");
+    public boolean validarProd(){
+        if (!"".equals(txtIdProd.getText()) || !"".equals(txtNombreProd.getText()) || !"".equals(txtPrecioProduccProd.getText())|| !"".equals(txtPrecioVentaProd.getText())|| !"".equals(cbxCategoriaProd.getSelectedItem())|| !"".equals(cbxMedidaProd.getSelectedItem())) {
+            return true;
+        }else{
+            return false;
+        }
     }
+    
+    
+    //Limpiar tablas
     public void limpiarTabla(){
         for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
@@ -119,7 +189,34 @@ public class Dashboard extends javax.swing.JFrame {
         }
         tableEmp.setModel(modelo);
     }
-    
+    public void listarCag() throws SQLException{
+        ArrayList<Categoria> listaCag = cagDao.listarCag();
+        modelo = (DefaultTableModel) tableCag.getModel();
+        Object[] ob = new Object[2];
+        for (int i = 0; i < listaCag.size(); i++) {
+            ob[0] = listaCag.get(i).getId();
+            ob[1] = listaCag.get(i).getNombre();
+            modelo.addRow(ob);
+        }
+        tableEmp.setModel(modelo);
+    }
+    public void listarProd() throws SQLException{
+        ArrayList<Producto> listaProductos = prodDao.listarProd();
+        modelo = (DefaultTableModel) tableProd.getModel();
+        Object[] ob = new Object[6];
+        for (int i = 0; i < listaProductos.size(); i++) {
+            
+            ob[0] = listaProductos.get(i).getIdProducto();
+            ob[1] = listaProductos.get(i).getNombreProd();
+            ob[2] = listaProductos.get(i).getCostoProduccion();
+            ob[3] = listaProductos.get(i).getPrecioVenta();
+            ob[4] = listaProductos.get(i).getCagProducto();
+            ob[5] = listaProductos.get(i).getMedidaProd();
+            
+            modelo.addRow(ob);
+        }
+        tableProd.setModel(modelo);
+    }
   
     @SuppressWarnings("unchecked")
     
@@ -132,6 +229,9 @@ public class Dashboard extends javax.swing.JFrame {
         menuMed = new javax.swing.JPopupMenu();
         menuEliminarMed = new javax.swing.JMenuItem();
         menuEditarMed = new javax.swing.JMenuItem();
+        menuCag = new javax.swing.JPopupMenu();
+        eliminarCag = new javax.swing.JMenuItem();
+        editarCag = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         JPanelNuevaVenta = new javax.swing.JPanel();
         jLabelNuevaventa = new javax.swing.JLabel();
@@ -159,20 +259,17 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtCodigoProd = new javax.swing.JTextField();
-        txtDescripcionProd = new javax.swing.JTextField();
-        txtPrecioCompra = new javax.swing.JTextField();
+        txtIdProd = new javax.swing.JTextField();
+        txtNombreProd = new javax.swing.JTextField();
+        txtPrecioProduccProd = new javax.swing.JTextField();
         txtPrecioVentaProd = new javax.swing.JTextField();
-        cbxProveedorProd = new javax.swing.JComboBox<>();
         cbxMedidaProd = new javax.swing.JComboBox<>();
         cbxCategoriaProd = new javax.swing.JComboBox<>();
         btnNuevoProd = new javax.swing.JButton();
         btnRegistrarProd = new javax.swing.JButton();
         btnModificarProd = new javax.swing.JButton();
-        txtIdProd = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableProd = new javax.swing.JTable();
         PajinadorProd = new javax.swing.JPanel();
@@ -237,12 +334,12 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
-        txtBuscarCag = new javax.swing.JTextField();
         btnNuevoCag = new javax.swing.JButton();
         btnRegistrarCag = new javax.swing.JButton();
         btnModificarCag = new javax.swing.JButton();
+        txtidCag = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
         txtNombreCag = new javax.swing.JTextField();
-        txtIdCag = new javax.swing.JTextField();
         jScrollPane10 = new javax.swing.JScrollPane();
         tableCag = new javax.swing.JTable();
         PajinadorCag = new javax.swing.JPanel();
@@ -390,6 +487,24 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
         menuMed.add(menuEditarMed);
+
+        eliminarCag.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Eliminar.png"))); // NOI18N
+        eliminarCag.setText("Eliminar");
+        eliminarCag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                eliminarCagMousePressed(evt);
+            }
+        });
+        menuCag.add(eliminarCag);
+
+        editarCag.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Editar.png"))); // NOI18N
+        editarCag.setText("Editar");
+        editarCag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                editarCagMousePressed(evt);
+            }
+        });
+        menuCag.add(editarCag);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -598,6 +713,9 @@ public class Dashboard extends javax.swing.JFrame {
         jLabelCategorias.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelCategorias.setText("Categorias");
         jLabelCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelCategoriasMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabelCategoriasMouseEntered(evt);
             }
@@ -689,19 +807,16 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel2.setText("Código");
+        jLabel2.setText("Id");
 
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel3.setText("Descripción");
+        jLabel3.setText("Nombre");
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel4.setText("Precio Compra");
+        jLabel4.setText("Precio Produccion");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel5.setText("Precio Venta");
-
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel6.setText("Proveedor");
 
         jLabel7.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel7.setText("Medida");
@@ -709,13 +824,11 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel8.setText("Categoria");
 
-        txtCodigoProd.addActionListener(new java.awt.event.ActionListener() {
+        txtIdProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProdActionPerformed(evt);
+                txtIdProdActionPerformed(evt);
             }
         });
-
-        cbxProveedorProd.setEditable(true);
 
         cbxMedidaProd.setEditable(true);
 
@@ -726,6 +839,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         btnRegistrarProd.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnRegistrarProd.setText("Registrar");
+        btnRegistrarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarProdActionPerformed(evt);
+            }
+        });
 
         btnModificarProd.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnModificarProd.setText("Modificar");
@@ -742,31 +860,30 @@ public class Dashboard extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel5))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(cbxMedidaProd, javax.swing.GroupLayout.Alignment.LEADING, 0, 137, Short.MAX_VALUE)
-                                .addComponent(cbxProveedorProd, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtDescripcionProd, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtCodigoProd, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cbxCategoriaProd, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtPrecioCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                                    .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtNombreProd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                                .addComponent(txtIdProd, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtPrecioProduccProd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                                .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.Alignment.LEADING))))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(btnNuevoProd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRegistrarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnModificarProd)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                        .addComponent(btnModificarProd))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7))
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbxMedidaProd, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbxCategoriaProd, 0, 137, Short.MAX_VALUE))))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -774,54 +891,64 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtCodigoProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtDescripcionProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombreProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtPrecioCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtPrecioProduccProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(cbxProveedorProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(cbxMedidaProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel5)
+                    .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(cbxCategoriaProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(cbxMedidaProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(97, 97, 97)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevoProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegistrarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnModificarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        jPanel4.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 290, 460));
+        jPanel4.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 310, 460));
 
         tableProd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Cedula", "Nombres", "Apellidos", "Telefono"
+                "Id", "Nombre", "Precio Produccion", "Precio venta", "Categoria", "Medida"
             }
-        ));
-        jScrollPane1.setViewportView(tableProd);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, true
+            };
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, 770, 360));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableProd);
+        if (tableProd.getColumnModel().getColumnCount() > 0) {
+            tableProd.getColumnModel().getColumn(0).setResizable(false);
+            tableProd.getColumnModel().getColumn(1).setResizable(false);
+            tableProd.getColumnModel().getColumn(2).setResizable(false);
+            tableProd.getColumnModel().getColumn(3).setResizable(false);
+            tableProd.getColumnModel().getColumn(4).setResizable(false);
+            tableProd.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 760, 360));
 
         javax.swing.GroupLayout PajinadorProdLayout = new javax.swing.GroupLayout(PajinadorProd);
         PajinadorProd.setLayout(PajinadorProdLayout);
@@ -834,7 +961,7 @@ public class Dashboard extends javax.swing.JFrame {
             .addGap(0, 90, Short.MAX_VALUE)
         );
 
-        jPanel4.add(PajinadorProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 400, 770, 90));
+        jPanel4.add(PajinadorProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 400, 770, 90));
 
         paneles.addTab("Producto", jPanel4);
 
@@ -1293,58 +1420,75 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Nueva Categoria", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
 
         jLabel27.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLabel27.setText("Nombre");
+        jLabel27.setText("Id");
 
         btnNuevoCag.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnNuevoCag.setText("Nuevo");
+        btnNuevoCag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNuevoCagMouseClicked(evt);
+            }
+        });
 
         btnRegistrarCag.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnRegistrarCag.setText("Registrar");
+        btnRegistrarCag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarCagActionPerformed(evt);
+            }
+        });
 
         btnModificarCag.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnModificarCag.setText("Modificar");
+        btnModificarCag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarCagActionPerformed(evt);
+            }
+        });
+
+        jLabel31.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jLabel31.setText("Nombre");
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevoCag)
-                    .addComponent(jLabel27))
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel22Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addGap(30, 30, 30)
                         .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtBuscarCag, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel22Layout.createSequentialGroup()
                                 .addComponent(btnRegistrarCag, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(34, 34, 34)
                                 .addComponent(btnModificarCag))
+                            .addComponent(txtidCag, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel31)
                             .addComponent(txtNombreCag, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel22Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(txtIdCag, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addGap(104, 104, 104)
+                        .addComponent(btnNuevoCag)))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(txtBuscarCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel27)
-                    .addComponent(txtNombreCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addComponent(jLabel27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtidCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel31)
+                .addGap(18, 18, 18)
+                .addComponent(txtNombreCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(86, 86, 86)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevoCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegistrarCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnModificarCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addComponent(txtIdCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addGap(18, 18, 18)
+                .addComponent(btnNuevoCag, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         jPanel8.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 19, 290, -1));
@@ -1354,9 +1498,15 @@ public class Dashboard extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Estado"
+                "Id", "Nombre"
             }
         ));
+        tableCag.setComponentPopupMenu(menuCag);
+        tableCag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableCagMouseClicked(evt);
+            }
+        });
         jScrollPane10.setViewportView(tableCag);
 
         jPanel8.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 19, 770, 360));
@@ -2281,9 +2431,9 @@ public class Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtpNombreEmpActionPerformed
 
-    private void txtCodigoProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProdActionPerformed
+    private void txtIdProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdProdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProdActionPerformed
+    }//GEN-LAST:event_txtIdProdActionPerformed
 
     private void jLabelNuevaventaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelNuevaventaMouseEntered
         JPanelNuevaVenta.setBackground(new Color(13,71,161));
@@ -2360,7 +2510,15 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelNuevaventaMouseClicked
 
     private void jLabelProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelProductosMouseClicked
-        paneles.setSelectedIndex(0);        // TODO add your handling code here:
+        limpiarTabla();
+        try {
+            listarProd();
+        } catch (SQLException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        paneles.setSelectedIndex(0);
+        listaComboCagProd();
+        listaComboMedProd();
     }//GEN-LAST:event_jLabelProductosMouseClicked
 
     private void txtCodNv3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodNv3ActionPerformed
@@ -2608,7 +2766,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void menuEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEliminarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuEliminarActionPerformed
-    //AQUI
+    //Eliminar 
     private void menuEliminarMedMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuEliminarMedMousePressed
         int fila = tableMed.rowAtPoint(evt.getPoint()); 
         boolean eliminado = false;
@@ -2681,6 +2839,159 @@ public class Dashboard extends javax.swing.JFrame {
     private void btnNuevoMedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoMedActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNuevoMedActionPerformed
+
+    private void btnRegistrarCagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCagActionPerformed
+        if (validarCag()) {
+            cag.setId(txtidCag.getText());
+            cag.setNombre(txtNombreCag.getText());
+            
+            boolean registrado = false;
+            try {
+                registrado = cagDao.RegistrarCag(cag);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (registrado) {
+                JOptionPane.showMessageDialog(null, "Categoria registrada");
+            }
+            limpiarTabla();
+            try {
+                listarCag();
+            } catch (SQLException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Los campos estan vacios");
+        }
+    }//GEN-LAST:event_btnRegistrarCagActionPerformed
+       //categorias activador
+    private void jLabelCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelCategoriasMouseClicked
+        limpiarTabla();
+        try {
+            listarCag();
+        } catch (SQLException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        paneles.setSelectedIndex(4);
+    }//GEN-LAST:event_jLabelCategoriasMouseClicked
+
+    private void eliminarCagMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarCagMousePressed
+        int fila = tableMed.rowAtPoint(evt.getPoint()); 
+        boolean eliminado = false;
+        
+        int opt = JOptionPane.showConfirmDialog(null, "¿Seguro que de desea eliminar la categoria?", "Eliminar categoria", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opt == JOptionPane.YES_OPTION) {
+            try {
+                eliminado=meDao.eliminarMedida(tableCag.getValueAt(fila, 0).toString());
+                limpiarCag();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.toString());
+            }
+            if (eliminado) {
+                JOptionPane.showMessageDialog(null, "Categoria eliminada con exito");
+            }else{
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar la categoria");
+            }
+           
+           
+            try {
+                limpiarTabla();
+                listarCag();
+            } catch (SQLException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_eliminarCagMousePressed
+
+    private void btnNuevoCagMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoCagMouseClicked
+        cagEditable(true);
+        btnRegistrarCag.setVisible(true);
+        btnModificarCag.setVisible(false);
+        limpiarCag();
+    }//GEN-LAST:event_btnNuevoCagMouseClicked
+
+    private void btnModificarCagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCagActionPerformed
+        if (validarCag()) {
+            boolean modificado = false;
+            cag.setId(txtidCag.getText());
+            cag.setNombre(txtNombreCag.getText());
+            
+            int opt = JOptionPane.showConfirmDialog(null, "¿Seguro que de desea modificar la categoria? ", "Modificar categoria", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (opt == JOptionPane.YES_OPTION) {
+                modificado=cagDao.ModificarCag(cag);
+                if (modificado) {
+                    JOptionPane.showMessageDialog(null, "Categoria modificado con exito");
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se pudo modificar la categoria");
+                }
+
+
+                try {
+                    limpiarTabla();
+                    listarCag();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnModificarCagActionPerformed
+
+    private void editarCagMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editarCagMousePressed
+        cagEditable(true);
+        txtidCag.setEditable(false);
+        btnRegistrarCag.setVisible(false);
+        btnModificarCag.setVisible(true);
+        modificar = tableCag.rowAtPoint(evt.getPoint()); 
+    }//GEN-LAST:event_editarCagMousePressed
+
+    private void tableCagMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCagMouseClicked
+        int fila = tableCag.rowAtPoint(evt.getPoint()); 
+       
+        txtidCag.setText(tableCag.getValueAt(fila, 0).toString());
+        txtNombreCag.setText(tableCag.getValueAt(fila, 1).toString());
+        cagEditable(false);
+    }//GEN-LAST:event_tableCagMouseClicked
+    
+    //Boton registrar productos
+    private void btnRegistrarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarProdActionPerformed
+        ArrayList<Categoria> listaCag = cagDao.listaCategorias();
+        if (validarProd()) {
+            
+            prod.setIdProducto(txtIdProd.getText());
+            prod.setNombreProd(txtNombreProd.getText());
+            prod.setCostoProduccion(Double.valueOf(txtPrecioProduccProd.getText()));
+            prod.setPrecioVenta(Double.valueOf(txtPrecioVentaProd.getText()));
+            int itemnumber = cbxCategoriaProd.getSelectedIndex();
+            prod.setCagProducto(listaCag.get(itemnumber).getNombre());
+            prod.setMedidaProd(cbxMedidaProd.getSelectedItem().toString());
+            boolean registrado = false;
+            try {
+                registrado = prodDao.RegistrarProd(prod);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (registrado) {
+                JOptionPane.showMessageDialog(null, "Producto registrado");
+            }
+            limpiarTabla();
+            try {
+                listarProd();
+            } catch (SQLException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Los campos estan vacios");
+        }
+        
+    }//GEN-LAST:event_btnRegistrarProdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2764,8 +3075,9 @@ public class Dashboard extends javax.swing.JFrame {
     public javax.swing.JComboBox<String> cbxCajaUser;
     public javax.swing.JComboBox<Object> cbxCategoriaProd;
     public javax.swing.JComboBox<Object> cbxMedidaProd;
-    public javax.swing.JComboBox<Object> cbxProveedorProd;
     public javax.swing.JComboBox<String> cbxRolUser;
+    private javax.swing.JMenuItem editarCag;
+    private javax.swing.JMenuItem eliminarCag;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel10;
@@ -2789,6 +3101,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
@@ -2816,7 +3129,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2865,6 +3177,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JPopupMenu menuCag;
     public javax.swing.JMenuItem menuEditar;
     public javax.swing.JMenuItem menuEditarMed;
     public javax.swing.JMenuItem menuEliminar;
@@ -2882,7 +3195,6 @@ public class Dashboard extends javax.swing.JFrame {
     public javax.swing.JTable tableProv;
     public javax.swing.JTable tableUser;
     private javax.swing.JTable tableVentas;
-    public javax.swing.JTextField txtBuscarCag;
     public javax.swing.JTextField txtBuscarProv;
     public javax.swing.JTextField txtBuscarUsers;
     private javax.swing.JTextField txtCantNC;
@@ -2894,11 +3206,8 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField txtCodNv4;
     private javax.swing.JTextField txtCodNv5;
     private javax.swing.JTextField txtCodNv8;
-    public javax.swing.JTextField txtCodigoProd;
-    public javax.swing.JTextField txtDescripcionProd;
     public javax.swing.JTextPane txtDireccionProv;
     private javax.swing.JTextPane txtDireecionEmpresa;
-    public javax.swing.JTextField txtIdCag;
     public javax.swing.JTextField txtIdProd;
     public javax.swing.JTextField txtIdProv;
     public javax.swing.JTextField txtIdUser;
@@ -2907,11 +3216,12 @@ public class Dashboard extends javax.swing.JFrame {
     public javax.swing.JTextField txtNombreCortoMed;
     private javax.swing.JTextField txtNombreEmpresa;
     public javax.swing.JTextField txtNombreMed;
+    public javax.swing.JTextField txtNombreProd;
     public javax.swing.JTextField txtNombreProv;
     public javax.swing.JTextField txtNombreUser;
-    public javax.swing.JTextField txtPrecioCompra;
     private javax.swing.JTextField txtPrecioNC;
     private javax.swing.JTextField txtPrecioNv1;
+    public javax.swing.JTextField txtPrecioProduccProd;
     public javax.swing.JTextField txtPrecioVentaProd;
     private javax.swing.JTextField txtProdNC;
     private javax.swing.JTextField txtProdNv;
@@ -2925,6 +3235,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField txtTotalNv1;
     public javax.swing.JTextField txtUsuarioUser;
     public javax.swing.JTextField txtccEmp;
+    public javax.swing.JTextField txtidCag;
     public javax.swing.JTextField txtidMed;
     public javax.swing.JTextField txtpApellidoEmp;
     public javax.swing.JTextField txtpNombreEmp;
