@@ -69,6 +69,7 @@ public class Main {
         //System.out.println("Fabrica: " +f1);
         Dashboard dashboard = new Dashboard();
         dashboard.setVisible(true);
+        
         dashboard.setExtendedState(JFrame.MAXIMIZED_BOTH);
    
     }
