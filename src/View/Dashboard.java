@@ -194,7 +194,7 @@ public class Dashboard extends javax.swing.JFrame {
             ob[2] = listaMedidas.get(i).getnCorto();
             modelo.addRow(ob);
         }
-        tableEmp.setModel(modelo);
+        tableMed.setModel(modelo);
     }
     public void listarCag() throws SQLException{
         ArrayList<Categoria> listaCag = cagDao.listarCag();
@@ -205,7 +205,7 @@ public class Dashboard extends javax.swing.JFrame {
             ob[1] = listaCag.get(i).getNombre();
             modelo.addRow(ob);
         }
-        tableEmp.setModel(modelo);
+        tableCag.setModel(modelo);
     }
     public void listarProd() throws SQLException{
         ArrayList<Producto> listaProductos = prodDao.listarProd();
@@ -1720,7 +1720,29 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIdProdActionPerformed
 
     private void btnModificarMedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarMedActionPerformed
+        if (validarMedida()) {
+            boolean modificado = false;
+            me.setIdMedida(txtidMed.getText());
+            me.setNombre(txtNombreMed.getText());
+            me.setnCorto(txtNombreCortoMed.getText());
 
+            int opt = JOptionPane.showConfirmDialog(null, "¿Seguro que de desea modificar la medida? ", "Modificar medida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (opt == JOptionPane.YES_OPTION) {
+                modificado=meDao.ModificarMedida(me);
+                if (modificado) {
+                    JOptionPane.showMessageDialog(null, "Medida modificada con exito");
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se pudo modificar la medida");
+                }
+
+                try {
+                    limpiarTabla();
+                    listarMedidas();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }//GEN-LAST:event_btnModificarMedActionPerformed
 
     private void btnRegistrarMedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMedActionPerformed

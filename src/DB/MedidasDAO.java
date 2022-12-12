@@ -33,6 +33,7 @@ public class MedidasDAO {
             ps.setString(2, me.getNombre());
             ps.setString(3, me.getnCorto());
             ps.execute();
+            ps.close();
             con.close();
             return true;
         }catch(java.sql.SQLIntegrityConstraintViolationException scv){
@@ -57,6 +58,7 @@ public class MedidasDAO {
                 me.setnCorto(rs.getString("n_corto"));
                 listaMedidas.add(me);
             }
+            ps.close();
             con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.toString());
@@ -73,6 +75,7 @@ public class MedidasDAO {
             ps.setString(3, me.getnCorto());
             ps.setString(4, me.getIdMedida());
             ps.execute();
+            ps.close();
             con.close();
             return true;
         } catch (SQLException e) {
@@ -87,6 +90,7 @@ public class MedidasDAO {
             ps=con.prepareStatement(sql);
             ps.setString(1, id_medida);
             ps.execute();
+            ps.close();
             con.close();
             
             return true;
